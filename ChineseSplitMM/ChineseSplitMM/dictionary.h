@@ -1,31 +1,23 @@
-// Dictionary.h
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <hash_map>
 #include <unordered_map>
-
-//#include <ext/hash_map>
-//using namespace __gnu_cxx;
-
 using namespace std;
-using namespace stdext;
 
 class CDictionary
 {
 public:
-	CDictionary(); //½«´ÊµäÎÄ¼ş¶ÁÈë²¢¹¹ÔìÎªÒ»¸ö¹şÏ£´Êµä
+	CDictionary();
 	~CDictionary();
-	int FindWord(string w); //ÔÚ¹şÏ£´ÊµäÖĞ²éÕÒ´Ê
+	CDictionary(const char* inputfile);	//å°†è¯å…¸æ–‡ä»¶è¯»å…¥å¹¶æ„é€ ä¸ºä¸€ä¸ªå“ˆå¸Œè¯å…¸
+	int findWord(string str);//åœ¨å“ˆå¸Œè¯å…¸ä¸­æŸ¥æ‰¾è¯
 
 private:
-	string strtmp; //¶ÁÈ¡´ÊµäµÄÃ¿Ò»ĞĞ
-	string word; //±£´æÃ¿¸ö´Ê
-	hash_map<string, int> wordhash; // ÓÃÓÚ¶ÁÈ¡´ÊµäºóµÄ¹şÏ£
-	hash_map<string, int >::iterator worditer; //
+	string strtmp;	//è¯»å–è¯å…¸çš„æ¯ä¸€è¡Œ
+	string word;	//ä¿å­˜æ¯ä¸ªè¯
+	hash_map<string, int> wordhash;	// ç”¨äºè¯»å–è¯å…¸åçš„å“ˆå¸Œ
+	hash_map<string, int>::iterator worditer;
 	typedef pair<string, int> sipair;
 };
-
-
-

@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{14DFCFCA-227E-4AAC-B33B-F8591E1CB453}</ProjectGuid>
+    <ProjectGuid>{497D7CF8-AF89-490F-9903-B4DF5B4AFF60}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ChineseSplitMM</RootNamespace>
   </PropertyGroup>
@@ -78,7 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dictionary.h" />
-    <ClInclude Include="mmseg.h" />
+    <ClInclude Include="doublemmseg.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

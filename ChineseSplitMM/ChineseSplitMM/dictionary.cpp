@@ -1,31 +1,33 @@
 #include "dictionary.h"
 using namespace std;
 
-//½«´ÊµäÎÄ¼ş¶ÁÈë²¢¹¹ÔìÎªÒ»¸ö¹şÏ£´Êµä
 CDictionary::CDictionary()
 {
-	ifstream infile("dictionarytest.dict"); // ´ò¿ª´Êµä
-	//ifstream infile("dict.xdb"); // ´ò¿ª´Êµä
- 	if (!infile.is_open()) // ´ò¿ª´ÊµäÊ§°ÜÔòÍË³ö³ÌĞò
+}
+//å°†è¯å…¸æ–‡ä»¶è¯»å…¥å¹¶æ„é€ ä¸ºä¸€ä¸ªå“ˆå¸Œè¯å…¸
+CDictionary::CDictionary(const char* inputfile)
+{
+	ifstream infile;
+	infile.open(inputfile);// æ‰“å¼€è¯å…¸
+	if (!infile.is_open())// æ‰“å¼€è¯å…¸å¤±è´¥åˆ™é€€å‡ºç¨‹åº
 	{
-	cerr << "Unable to open input file: " << "wordlexicon"
-	<< " -- bailing out!" << endl;
-	exit(0);
+		cerr << "Unable to open input file: " << "wordlexicon"
+		<< " -- bailing out!" << endl;
+		exit(0);
 	}
-	while (getline(infile, strtmp, '\n')) // ¶ÁÈë´ÊµäµÄÃ¿Ò»ĞĞ²¢½«ÆäÌí¼ÓÈë¹şÏ£ÖĞ
+	while(getline(infile, strtmp, '\n'))// è¯»å…¥è¯å…¸çš„æ¯ä¸€è¡Œå¹¶å°†å…¶æ·»åŠ å…¥å“ˆå¸Œä¸­
 	{
-		istringstream istr(strtmp);		
-		istr >> word; //¶ÁÈëÃ¿ĞĞµÚÒ»¸ö´Ê
-		wordhash.insert(sipair(word, 1)); //²åÈëµ½¹şÏ£ÖĞ
+		istringstream istr(strtmp);
+		istr >> word;	//è¯»å…¥æ¯è¡Œç¬¬ä¸€ä¸ªè¯
+		wordhash.insert(sipair(word,1));//æ’å…¥åˆ°å“ˆå¸Œä¸­
 	}
 }
-
 CDictionary::~CDictionary()
 {
 }
 
-//ÔÚ¹şÏ£´ÊµäÖĞ²éÕÒ´Ê£¬ÈôÕÒµ½£¬Ôò·µ»Ø£¬·ñÔò·µ»Ø
-int CDictionary::FindWord(string w)
+//åœ¨å“ˆå¸Œè¯å…¸ä¸­æŸ¥æ‰¾è¯ï¼Œè‹¥æ‰¾åˆ°ï¼Œåˆ™è¿”å›ï¼Œå¦åˆ™è¿”å›
+int CDictionary::findWord(string w)
 {
 	if (wordhash.find(w) != wordhash.end())
 	{

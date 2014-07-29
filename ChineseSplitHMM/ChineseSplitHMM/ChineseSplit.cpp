@@ -70,7 +70,10 @@ void ChineseSplit::initialModel()
 		}
 	}
 }
-
+//S->S->B->E->S->B->E->B->E->B->E->B->E------>B->E->S->B->E->S->B->E->B->E->B->E
+//7 75 76 64 16 77 78 79 80 72 73 17 67      81 65 82 83 84 16 79 80 72 73 85 583 
+//7 75 76 64 16 77 78 79 80 72 73 17 67 4842 81 65 82 83 84 16 79 80 72 73 85 583 
+//S->S->B->E->S->B->E->B->E->B->E->B->M->M--->E->B->E->B->E->S->B->E->B->E->B->E
 vector<string> split(string str,string pattern)
  {
      std::string::size_type pos;

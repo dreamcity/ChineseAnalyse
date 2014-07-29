@@ -12,6 +12,14 @@ int HMM::getT()
 {
 	return T;
 }
+void HMM::setT(int t)
+{
+	T = t;
+}
+void HMM::setO(int* os)
+{
+	O = os;
+}
 void HMM::setData(int t, int* o, int m ,int n, double* pi, double** tm, double** cm )
 {
 	T = t;
@@ -28,7 +36,54 @@ void HMM::setData(int t, int* o, int m ,int n, double* pi, double** tm, double**
 // 初始概率矩阵 Pi M*1
 // 转移概率矩阵 TMatrix M*M
 // 混淆概率矩阵 CMatrix M*N
-void HMM::initial(const char* inputfile1, const char* inputfile2)
+void HMM::initialModel(const char* inputfile)
+{
+	ifstream fin;
+	//const char* inputfile = "outputtest.txt";
+	fin.open(inputfile);
+	if (!fin.is_open())
+	{
+		cout<<"can not open inputfile: HMMModel"<<endl;
+		return ;
+	}
+
+	//HMM hmm;
+	fin >> M >> N;
+
+	Pi = new double [M];
+	TMatrix = new double *[M];
+	for (int i = 0; i < M; ++i)
+	{
+		TMatrix[i] = new double [M];
+	}
+	CMatrix = new double *[M];
+	for (int i = 0; i < M; ++i)
+	{
+		CMatrix[i] = new double [N];
+	}
+
+	//赋值
+	for (int i = 0; i < M; ++i)
+	{
+		fin >> Pi[i];			
+	}
+	for (int i = 0; i < M; ++i)
+	{
+		for (int j = 0; j < M; ++j)
+		{
+			fin >> TMatrix[i][j];
+		}
+	}
+	for (int i = 0; i < M; ++i)
+	{
+		for (int j = 0; j < N; ++j)
+		{
+			fin>> CMatrix[i][j];
+		}
+	}
+	fin.close();
+}
+void HMM::initialData(const char* inputfile1, const char* inputfile2)
 {
 	ifstream fin1;
 	//const char* inputfile = "outputtest.txt";

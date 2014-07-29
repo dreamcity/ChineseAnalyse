@@ -3,9 +3,13 @@
 
 #include "stdafx.h"
 #include "iostream"
+#include <fstream>
 #include "HMMmodel.h"
 #include "ChineseSplit.h"
 #include "map"
+#ifndef Separator
+#define Separator "/ "
+#endif
 using namespace std;
 void loadmapdata(const char* inputfile, map<string, int>& mm)
 {
@@ -106,28 +110,86 @@ void outputpath(int T, int* path)
 	cout<<state[T-1]<<endl;
 	return ;
 }
+
+void getsplitstr(int* path, string str1, string& str2)
+{
+
+	int i =0;
+	int j;
+	int m ;
+	while(!str1.empty())
+	{
+		int len = str1.length();
+		//cout<<"len:"<<len<<endl;
+		switch(path[i++])
+		{
+			case 0:
+				str2 += str1.substr(0,2) + Separator;
+				str1 = str1.substr(2,len-2);
+				break;
+			case 1: j = i; break;
+			case 2:  break;
+			case 3:
+				m = (i-j+1)*2;
+				str2 += str1.substr(0,m) + Separator;
+				str1 = str1.substr(m,len-m);
+				break;
+			default : cout<<"ERROR"<<endl; break;
+		}
+		//cout<<"str1len:"<<str1.length()<<endl;
+	}
+	return ;
+}
+void getsegresult(int* path, const char* inputfile, const char* outputfile)
+{
+	ifstream fstr;
+	fstr.open(inputfile);
+	ofstream resultfile;
+	resultfile.open(outputfile);
+	string strtmp;
+	
+	while(getline(fstr, strtmp,'\n'))
+	{
+		if (strtmp.empty())
+		{
+			continue;
+		}
+		string strout = "";
+		getsplitstr( path, strtmp, strout);
+		resultfile<<strout<<endl;
+	}
+}
+
 int _tmain(int argc, _TCHAR* argv[])
 {
-	const char* databasefile = "databasefile.txt";
-	const char* markfile = "markfile.txt";
-	const char* statefile = "statefile.txt";
-	const char* HMMModel = "hmmmodel.txt";
-	const char* MAPData = "mapdata.txt";
-	const char* datatestfile = "datatestfile.txt";
-	const char* Osequence = "osequence.txt";
-	ChineseSplit CNS;
-	CNS.getMarkSentenceFile(databasefile, markfile, statefile);
-	CNS.initialModel();
-	CNS.getInitMatrix(statefile);
-	CNS.getTranMatrix(statefile);
-	CNS.getConMatrix(markfile);
-	CNS.saveMapData(MAPData);
-	CNS.saveHMMModel(HMMModel);
-	getOSequence(MAPData, datatestfile, Osequence);
-	//**********************************************************************
+	const char* databasefile = "../data/databasefile.txt";
+	const char* markfile = "../tempdata/markfile.txt";
+	const char* statefile = "../tempdata/statefile.txt";
+	const char* HMMModel = "../data/hmmmodel.txt";
+	const char* MAPData = "../data/mapdata.txt";
+	const char* datatestfile = "../iodata/datatestfile.txt";
+	const char* Osequence = "../iodata/osequence.txt";
+	const char* segresult = "../iodata/segresult.txt";
+	//判断map文件与hmmmodel是否存在，不存在，则创建；存在，则直接加载
+	ifstream mapfile;
+	ifstream modelfile;
+	mapfile.open(MAPData);
+	modelfile.open(HMMModel);
+	if(!mapfile || !modelfile)
+	{
+		ChineseSplit CNS;
+		CNS.getMarkSentenceFile(databasefile, markfile, statefile);
+		CNS.initialModel();
+		CNS.getInitMatrix(statefile);
+		CNS.getTranMatrix(statefile);
+		CNS.getConMatrix(markfile);
+		CNS.saveMapData(MAPData);
+		CNS.saveHMMModel(HMMModel);
+	}
 
+	getOSequence(MAPData, datatestfile, Osequence);
 	HMM hm;
-	hm.initial(HMMModel, Osequence);
+	hm.initialData(HMMModel, Osequence);
 	int T = hm.getT(); 
 	int* path = new int [T];
 	for(int i =0; i<T ; i++)
@@ -136,5 +198,6 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 	hm.viterbi(path);
 	outputpath(T, path);
+	getsegresult(path, datatestfile, segresult);
 	return 0;
 }

@@ -17,8 +17,11 @@ public:
 	//int getM();
 	//int getN();
 	int getT();
+	void setT(int t);
+	void setO(int* os);
 	void setData(int t, int* o, int m ,int n, double* pi, double** tm, double** cm );
-	void initial(const char* inputfile1, const char* inputfile2);
+	void initialModel(const char* inputfile);
+	void initialData(const char* inputfile1, const char* inputfile2);
 	void forward(double& sum_prob);
 	void viterbi(int* path);
 

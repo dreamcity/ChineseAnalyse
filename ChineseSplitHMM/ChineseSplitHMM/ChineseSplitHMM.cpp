@@ -470,7 +470,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	const char* MAPData = "../data/mapdata.txt";
 	const char* datatestfile = "../iodata/datatestfile.txt";
 	const char* datasegfile = "../tempdata/datasegfile.txt";
-	const char* Osequence = "../iodata/osequence.txt";
+	const char* Osequence = "../tempdata/osequence.txt";
 	const char* segresult = "../iodata/segresult.txt";
 	//判断map文件与hmmmodel是否存在，不存在，则创建；存在，则直接加载
 	ifstream mapfile;
@@ -491,6 +491,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 	 getSplitSegFile(datatestfile, datasegfile);
 	//getsegdatafile(datatestfile, datasegfile);
+	//ChineseSplit CNS;
+	//CNS.getSplitSegFile(databasefile, splitsegfile);
 	getOSequence(MAPData,  datasegfile, Osequence);
 	//************************
 	//准备载入 输入观察序列的长度与编码
@@ -520,11 +522,13 @@ int _tmain(int argc, _TCHAR* argv[])
 		for(int j =0; j<T[i] ; j++)
 		{
 			path[j] = 0;
+			//cout<<"path["<<j<<"]:"<<path[j]<<endl;
 		}
 		hmm.viterbi(path);
 		outputpath(T[i], path);
 		getVStrSegResult(path, vstr, str);		
 		strtmp += str;
+		delete path;
 	}
 	fout<<strtmp<<endl;
 

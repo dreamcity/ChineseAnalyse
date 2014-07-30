@@ -248,10 +248,10 @@ void HMM::viterbi(int* path )
 				}
 			}
 			sigma[t+1][i] = max_value * CMatrix[i][O[t+1]];
+			//cout<<"sigma[t+1][i]"<<sigma[t+1][i]<<endl;
 			psi[t+1][i] = pointer;
 		}
 	}
-
 	double max_prob = 0.0;
 	path[T-1] =-1;
 	for (int i = 0; i < M; ++i)

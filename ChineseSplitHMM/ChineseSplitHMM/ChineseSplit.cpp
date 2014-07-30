@@ -174,12 +174,12 @@ void markSentence(string str1, string& str2 ,string& str3)
 		str2 = str1 + "S";
 		str3 = "S";
 	}
-	else if ( ch < 176 && ch > 128)
-	{
+	//else if ( ch < 176 && ch > 128)
+	//{
 
-		str2 = "S";
-		str3 = "S";
-	}
+	//	str2 = str1 +"S";
+	//	str3 = "S";
+	//}
 	else
 	{
 		if ( len == 2)
@@ -223,8 +223,9 @@ void ChineseSplit::getMarkSentenceFile(const char* inputfile, const char* output
 	int num = 0;
 	cout<<"loading filedata..."<<endl;
 	while(getline(infile, strtmp, '\n'))
-	//for (int j = 0; j < 5000; ++j)
+	//for (int j = 0; j < 500; ++j)
  	{
+		//getline(infile, strtmp, '\n');
 		if (strtmp.empty())
 		{
 			continue ;
@@ -366,7 +367,7 @@ void ChineseSplit::getInitMatrix(const char* inputfile)
 		}
 		else
 		{
-			count[3]+=1;
+			count[1]+=1;
 		}
 	}
 	int sum = count[0] + count[3];
@@ -382,6 +383,7 @@ void ChineseSplit::getInitMatrix(const char* inputfile)
 
 void ChineseSplit::getTranMatrix(const char* inputfile)
 {
+	cout<<"counting the transfrom probality matrix ..."<<endl;
 	string strtmp;
 	string mark;
 
@@ -576,6 +578,7 @@ void ChineseSplit::saveMapData(const char* outputfile)
 }
 void ChineseSplit::getConMatrix(const char* inputfile)
 {
+	cout<<"counting the confuse probality matrix ..."<<endl;
 	double** countCMData = new double *[M];
 	for (int i = 0; i < M; ++i)
 	{

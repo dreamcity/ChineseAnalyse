@@ -64,8 +64,23 @@ void getsegdatafile(const char* inputfile, const char* outputfile)
 			//cout<<"strtmp:"<<strtmp<<endl;
 			if (str2.empty())
 			{
+				int len = str1.length();
+				if (len >= 2)
+				{
+					string tmp = str1.substr(len-2,len);
+					unsigned char c =tmp[0];
+					if(c < 176)
+					{
+						outfile<<str1.substr(0, len-2)<<endl;
+						outfile<<str1.substr(len-2, 2)<<endl;
+					}
+					else
+					{
+						outfile << str1 <<endl;
+					}
+				}
 				//cout<<"str1:"<<str1<<endl;
-				outfile << str1 <<endl;
+				
 			}
 			//cout<<"str2:"<<str2<<endl;
 		}
@@ -221,7 +236,7 @@ void getSplitStr(int* path, string str1, string& str2)
 		//即忽略句子最后一个字的状态，直接作为结尾。
 		if (i == L/2 -2)
 		{
-			str2 = str1 + Separator;
+			str2 += str1 + Separator;
 			str1 = "";
 		}
 		//cout<<"str1len:"<<str1.length()<<endl;

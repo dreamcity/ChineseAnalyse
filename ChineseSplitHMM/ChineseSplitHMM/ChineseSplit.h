@@ -16,6 +16,7 @@ public:
 	// eg 今B天E是S星B期M一E
 	// outputfile1 保存观测样本集的标注
 	// eg BESBME
+	void getSplitSegFile(const char* inputfile, const char* outputfile);
 	void getMarkSentenceFile(const char* inputfile, const char* outputfile1, const char* outputfile2);
 	void countFre(int* count, double* markfre, int m);
 	//void getHMMModelFile(const char* inputfile, const char* outputfile);

@@ -31,7 +31,6 @@ ChineseSplit::ChineseSplit()
 ChineseSplit::~ChineseSplit()
 {
 }
-
 map<string , int >  ChineseSplit::getMapData()
 {
 	return MapData;
@@ -70,10 +69,77 @@ void ChineseSplit::initialModel()
 		}
 	}
 }
-//S->S->B->E->S->B->E->B->E->B->E->B->E------>B->E->S->B->E->S->B->E->B->E->B->E
-//7 75 76 64 16 77 78 79 80 72 73 17 67      81 65 82 83 84 16 79 80 72 73 85 583 
-//7 75 76 64 16 77 78 79 80 72 73 17 67 4842 81 65 82 83 84 16 79 80 72 73 85 583 
-//S->S->B->E->S->B->E->B->E->B->E->B->M->M--->E->B->E->B->E->S->B->E->B->E->B->E
+void ChineseSplit::getSplitSegFile(const char* inputfile, const char* outputfile)
+{
+	ifstream infile;
+	infile.open(inputfile);
+	ofstream outfile;
+	outfile.open(outputfile);
+	string strtmp;
+	string str1 = "";
+	string str2 = "";
+	while(getline(infile, strtmp, '\n'))
+	{
+		if(strtmp.empty())
+		{
+			continue;
+		}
+		while(!strtmp.empty())
+		{
+			int len = strtmp.length();
+			int index = 0;
+			for (int i = 0; i < len; )
+			{
+				unsigned char ch0 = strtmp[i];				
+				if (ch0 < 128)
+				{
+					i++;
+				}
+				else
+				{
+					unsigned char ch1 = strtmp[i+1];
+					if ((ch0 ==163 && ch1==161)||(ch0 ==161 && ch1==163)||(ch0 ==163 && ch1==187)
+						||(ch0 ==163 && ch1==172)||(ch0 ==163 && ch1==191)||(ch0 ==161 && ch1==170)
+						||(ch0 ==163 && ch1==186)||(ch0 ==161 && ch1==176)||(ch0 ==161 && ch1==177))
+					{
+						index = i;
+						break;
+					}
+					else
+					{
+						i+=2;
+					}
+				}
+			}
+			if (index == 0)
+			{
+				//str1 = strtmp.substr(0, len);
+				str2 = strtmp.substr(0, len);
+				strtmp = "";
+			}
+			else
+			{
+				str1 = str2 + strtmp.substr(0, index+2);
+				//str1 =  strtmp.substr(0, index+2);
+				str2 = "";
+				strtmp =strtmp.substr(index+2, len-index-2);
+			}
+
+			if (str2.empty()&& str1.length()>20)
+			{
+				outfile << str1 <<endl;
+				
+			}
+		}
+	}
+	if(str2.length()>20)
+	{
+		outfile << str2 <<endl;
+	}
+	return ;
+}
+
+
 vector<string> split(string str,string pattern)
  {
      std::string::size_type pos;
@@ -111,8 +177,8 @@ void markSentence(string str1, string& str2 ,string& str3)
 	else if ( ch < 176 && ch > 128)
 	{
 
-		str2 = "";
-		str3 = "";
+		str2 = "S";
+		str3 = "S";
 	}
 	else
 	{

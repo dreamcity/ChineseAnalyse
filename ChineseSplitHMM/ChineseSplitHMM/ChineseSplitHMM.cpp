@@ -15,6 +15,75 @@
 using namespace std;
 //对输入的测试文本进行处理，得到按照标点符号分隔之后的句子集合
 //每一句话，单独写入一行
+void getSplitSegFile(const char* inputfile, const char* outputfile)
+{
+	ifstream infile;
+	infile.open(inputfile);
+	ofstream outfile;
+	outfile.open(outputfile);
+	string strtmp;
+	string str1 = "";
+	string str2 = "";
+	while(getline(infile, strtmp, '\n'))
+	{
+		if(strtmp.empty())
+		{
+			continue;
+		}
+		while(!strtmp.empty())
+		{
+			int len = strtmp.length();
+			int index = -1;
+			for (int i = 0; i < len; )
+			{
+				unsigned char ch0 = strtmp[i];				
+				if (ch0 < 128)
+				{
+					i++;
+				}
+				else
+				{
+					unsigned char ch1 = strtmp[i+1];
+					if ((ch0 ==163 && ch1==161)||(ch0 ==161 && ch1==163)||(ch0 ==163 && ch1==187)
+						||(ch0 ==163 && ch1==172)||(ch0 ==163 && ch1==191)||(ch0 ==161 && ch1==170)
+						||(ch0 ==163 && ch1==186)||(ch0 ==161 && ch1==176)||(ch0 ==161 && ch1==177))
+					{
+						index = i;
+						break;
+					}
+					else
+					{
+						i+=2;
+					}
+				}
+			}
+			if (index == -1)
+			{
+				//str1 = strtmp.substr(0, len);
+				str2 = strtmp.substr(0, len);
+				strtmp = "";
+			}
+			else
+			{
+				str1 = str2 + strtmp.substr(0, index+2);
+				//str1 =  strtmp.substr(0, index+2);
+				str2 = "";
+				strtmp =strtmp.substr(index+2, len-index-2);
+			}
+
+			if (str2.empty())
+			{
+				outfile << str1 <<endl;
+				
+			}
+		}
+	}
+	//if(str2.length()>20)
+	{
+		outfile << str2 <<endl;
+	}
+	return ;
+}
 void getsegdatafile(const char* inputfile, const char* outputfile)
 {
 	//const char* infilename = "inputfile.txt";
@@ -338,9 +407,7 @@ void getOSdata(const char* inputfile, int num ,int* T, int** O)
 			fin >> O[i][j];
 		}
 	}
-	cout <<"T[i]:"<<T[0]<<endl;
 	fin.close();
-	cout <<"T[i]:"<<T[0]<<endl;
 	return ;
 }
 //end***********************************************************************
@@ -396,12 +463,13 @@ void getOSdata(const char* inputfile, int num ,int* T, int** O)
 int _tmain(int argc, _TCHAR* argv[])
 {
 	const char* databasefile = "../data/databasefile.txt";
+	const char* splitsegfile = "../tempdata/splitsegfile.txt";
 	const char* markfile = "../tempdata/markfile.txt";
 	const char* statefile = "../tempdata/statefile.txt";
 	const char* HMMModel = "../data/hmmmodel.txt";
 	const char* MAPData = "../data/mapdata.txt";
 	const char* datatestfile = "../iodata/datatestfile.txt";
-	const char* datasegfile = "../iodata/datasegfile.txt";
+	const char* datasegfile = "../tempdata/datasegfile.txt";
 	const char* Osequence = "../iodata/osequence.txt";
 	const char* segresult = "../iodata/segresult.txt";
 	//判断map文件与hmmmodel是否存在，不存在，则创建；存在，则直接加载
@@ -412,7 +480,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	if(!mapfile || !modelfile)
 	{
 		ChineseSplit CNS;
-		CNS.getMarkSentenceFile(databasefile, markfile, statefile);
+		CNS.getSplitSegFile(databasefile, splitsegfile);
+		CNS.getMarkSentenceFile(splitsegfile, markfile, statefile);
 		CNS.initialModel();
 		CNS.getInitMatrix(statefile);
 		CNS.getTranMatrix(statefile);
@@ -420,19 +489,16 @@ int _tmain(int argc, _TCHAR* argv[])
 		CNS.saveMapData(MAPData);
 		CNS.saveHMMModel(HMMModel);
 	}
-
-	getsegdatafile(datatestfile, datasegfile);
+	 getSplitSegFile(datatestfile, datasegfile);
+	//getsegdatafile(datatestfile, datasegfile);
 	getOSequence(MAPData,  datasegfile, Osequence);
 	//************************
 	//准备载入 输入观察序列的长度与编码
 	int num;
-
 	getlinenum(Osequence,num);
-	//cout<<"num:"<<num<<endl;
 	int* T = new int [num];
 	int** O = new int* [num];
 	getOSdata(Osequence, num , T, O);
-	cout <<"T[i]:"<<T[0]<<endl;
 	string strtmp = "";
 	string str = "";
 	vector<string> vstr;
@@ -443,13 +509,13 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	for (int i = 0; i < num; ++i)
 	{		
-		cout <<"T[i]:"<<T[0]<<endl;
+		
 		hmm.setT(T[i]);
 		hmm.setO(O[i]);
-		for (int k=0; k<T[i] ; k++)
-		{
-			cout<<O[i][k]<<endl;
-		}
+		//for (int k=0; k<T[i] ; k++)
+		//{
+		//	cout<<O[i][k]<<endl;
+		//}
 		int* path = new int [T[i]];
 		for(int j =0; j<T[i] ; j++)
 		{
@@ -463,16 +529,6 @@ int _tmain(int argc, _TCHAR* argv[])
 	fout<<strtmp<<endl;
 
 	//**************************
-	//HMM hm;
-	//hm.initialData(HMMModel, Osequence);
-	//int T = hm.getT(); 
-	//int* path = new int [T];
-	//for(int i =0; i<T ; i++)
-	//{
-	//	path[i] = 0;
-	//}
-	//hm.viterbi(path);
-	//outputpath(T, path);
-//	getsegresult(path, datatestfile, segresult);
+
 	return 0;
 }

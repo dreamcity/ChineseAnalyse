@@ -1,14 +1,26 @@
-﻿生成启动时间为 2014/7/31 1:48:32。
-     1>项目“D:\ProjectDev\ChineseAnalyse\ChineseSplitHMM\ChineseSplitHMM\ChineseSplitHMM.vcxproj”在节点 2 上(build 个目标)。
-     1>InitializeBuildStatus:
+﻿生成启动时间为 2014/7/31 12:52:50。
+     1>项目“D:\ProjectDev\ChineseAnalyse\ChineseSplitHMM\ChineseSplitHMM\ChineseSplitHMM.vcxproj”在节点 2 上(rebuild 个目标)。
+     1>_PrepareForClean:
+         正在删除文件“Debug\ChineseSplitHMM.lastbuildstate”。
+       InitializeBuildStatus:
          正在创建“Debug\ChineseSplitHMM.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
        ClCompile:
-         D:\ProgramDT\VisualStudio2010\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ChineseSplitHMM.cpp
+         D:\ProgramDT\VisualStudio2010\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ChineseSplit.cpp ChineseSplitHMM.cpp HMMmodel.cpp stdafx.cpp
+         stdafx.cpp
+         HMMmodel.cpp
+     1>d:\projectdev\chineseanalyse\chinesesplithmm\chinesesplithmm\hmmmodel.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>d:\projectdev\chineseanalyse\chinesesplithmm\chinesesplithmm\hmmmodel.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
          ChineseSplitHMM.cpp
      1>d:\projectdev\chineseanalyse\chinesesplithmm\chinesesplithmm\hmmmodel.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
      1>d:\projectdev\chineseanalyse\chinesesplithmm\chinesesplithmm\chinesesplit.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         ChineseSplit.cpp
+     1>d:\projectdev\chineseanalyse\chinesesplithmm\chinesesplithmm\chinesesplit.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>d:\projectdev\chineseanalyse\chinesesplithmm\chinesesplithmm\chinesesplit.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>d:\projectdev\chineseanalyse\chinesesplithmm\chinesesplithmm\chinesesplit.cpp(160): warning C4018: “<”: 有符号/无符号不匹配
+     1>d:\projectdev\chineseanalyse\chinesesplithmm\chinesesplithmm\chinesesplit.cpp(252): warning C4018: “<”: 有符号/无符号不匹配
+         正在生成代码...
        ManifestResourceCompile:
-         所有输出均为最新。
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\ChineseSplitHMM.exe.embed.manifest.res" Debug\ChineseSplitHMM_manifest.rc 
        Link:
          D:\ProgramDT\VisualStudio2010\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\ProjectDev\ChineseAnalyse\ChineseSplitHMM\Debug\ChineseSplitHMM.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\ChineseSplitHMM.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"D:\ProjectDev\ChineseAnalyse\ChineseSplitHMM\Debug\ChineseSplitHMM.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\ProjectDev\ChineseAnalyse\ChineseSplitHMM\Debug\ChineseSplitHMM.lib" /MACHINE:X86 Debug\ChineseSplitHMM.exe.embed.manifest.res
          Debug\ChineseSplit.obj
@@ -16,16 +28,21 @@
          Debug\HMMmodel.obj
          Debug\stdafx.obj
        Manifest:
+         正在删除文件“Debug\ChineseSplitHMM.exe.embed.manifest”。
          C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\ChineseSplitHMM.exe.embed.manifest" /manifest Debug\ChineseSplitHMM.exe.intermediate.manifest
-         所有输出均为最新。
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\ChineseSplitHMM.exe.embed.manifest.res" Debug\ChineseSplitHMM_manifest.rc 
        LinkEmbedManifest:
-         所有输出均为最新。
+         D:\ProgramDT\VisualStudio2010\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\ProjectDev\ChineseAnalyse\ChineseSplitHMM\Debug\ChineseSplitHMM.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\ChineseSplitHMM.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"D:\ProjectDev\ChineseAnalyse\ChineseSplitHMM\Debug\ChineseSplitHMM.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\ProjectDev\ChineseAnalyse\ChineseSplitHMM\Debug\ChineseSplitHMM.lib" /MACHINE:X86 Debug\ChineseSplitHMM.exe.embed.manifest.res
+         Debug\ChineseSplit.obj
+         Debug\ChineseSplitHMM.obj
+         Debug\HMMmodel.obj
+         Debug\stdafx.obj
          ChineseSplitHMM.vcxproj -> D:\ProjectDev\ChineseAnalyse\ChineseSplitHMM\Debug\ChineseSplitHMM.exe
        FinalizeBuildStatus:
          正在删除文件“Debug\ChineseSplitHMM.unsuccessfulbuild”。
          正在对“Debug\ChineseSplitHMM.lastbuildstate”执行 Touch 任务。
-     1>已完成生成项目“D:\ProjectDev\ChineseAnalyse\ChineseSplitHMM\ChineseSplitHMM\ChineseSplitHMM.vcxproj”(build 个目标)的操作。
+     1>已完成生成项目“D:\ProjectDev\ChineseAnalyse\ChineseSplitHMM\ChineseSplitHMM\ChineseSplitHMM.vcxproj”(rebuild 个目标)的操作。
 
 生成成功。
 
-已用时间 00:00:01.08
+已用时间 00:00:05.95

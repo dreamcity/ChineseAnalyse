@@ -36,6 +36,7 @@ void HMM::setData(int t, int* o, int m ,int n, double* pi, double** tm, double**
 // 初始概率矩阵 Pi M*1
 // 转移概率矩阵 TMatrix M*M
 // 混淆概率矩阵 CMatrix M*N
+// 初始化模型
 void HMM::initialModel(const char* inputfile)
 {
 	ifstream fin;
@@ -83,6 +84,7 @@ void HMM::initialModel(const char* inputfile)
 	}
 	fin.close();
 }
+//同时载入模型参数与观测序列数据
 void HMM::initialData(const char* inputfile1, const char* inputfile2)
 {
 	ifstream fin1;
@@ -145,7 +147,7 @@ void HMM::initialData(const char* inputfile1, const char* inputfile2)
 	}
 	fin2.close();
 }
-
+//前向算法，解决评估问题，即求产生序列的最大概率
 void HMM::forward(double& sum_prob)
 {
 	//sum_prob为最终返回结果
@@ -194,7 +196,7 @@ void HMM::forward(double& sum_prob)
 	}
 	return ;
 }
-
+//viterbi，解决解码问题，即就给定序列的最大生成状态
 void HMM::viterbi(int* path )
 {
 	//定义两个T * M的二维矩阵
@@ -248,7 +250,6 @@ void HMM::viterbi(int* path )
 				}
 			}
 			sigma[t+1][i] = max_value * CMatrix[i][O[t+1]];
-			//cout<<"sigma[t+1][i]"<<sigma[t+1][i]<<endl;
 			psi[t+1][i] = pointer;
 		}
 	}
@@ -268,39 +269,3 @@ void HMM::viterbi(int* path )
 	}
 	return ;
 }
-
-// int main(int argc, char const *argv[])
-// {
-// 	HMM hmm;
-// 	hmm.initial("input.txt");
-// 	// const char* file = "1.txt";
-// 	// ifstream f(file);
-// 	// int T;
-// 	// f >> T;
-// 	// cout<<"T:"<<T<<endl;
-// 	// double sum_prob;
-// 	int T =hmm.getT();
-// 	int* path = new int [T];
-// 	//int* O = new int [T];
-// 	// for (int i = 0; i < T; ++i)
-// 	// {
-// 	// 	// int tmp;
-// 	// 	// f >> tmp;
-// 	// 	O[i] = tmp ;
-// 	// 	cout<<"O:"<<O[i]<<endl;
-// 	// }
-	
-// 	// hmm.forward(T, O, sum_prob);
-// 	hmm.viterbi( path );
-// 	// cout<< "The result of data group  : " <<sum_prob<<endl;
-// 	for (int i = 0; i < T-1; ++i)
-// 	{
-// 		cout<<path[i] + 1<<"->";
-// 	}
-// 	cout<<path[T-1] + 1 <<endl;
-// 		// 	for(k = 0; k < T - 1; k++)
-// 		// 	fout<<hidden[k] + 1<<"->";
-// 		// fout<<hidden[T-1] + 1<<endl;
-// 	//int O[k] = 
-// 	return 0;
-// }

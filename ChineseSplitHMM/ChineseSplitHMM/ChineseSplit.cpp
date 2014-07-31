@@ -27,7 +27,6 @@ void disPlay2D(T1** arr, T2 m, T2 n)
 ChineseSplit::ChineseSplit()
 {
 }
-
 ChineseSplit::~ChineseSplit()
 {
 }
@@ -35,6 +34,7 @@ map<string , int >  ChineseSplit::getMapData()
 {
 	return MapData;
 }
+//初始化HMMmodel，主要是分配数组空间
 void ChineseSplit::initialModel()
 {
 	M = 4;
@@ -69,15 +69,26 @@ void ChineseSplit::initialModel()
 		}
 	}
 }
+//对输入的测试文本进行处理，得到按照标点符号分隔之后的句子集合
+//每一句话，单独写入一行
+//类似getSplitSegFile
 void ChineseSplit::getSplitSegFile(const char* inputfile, const char* outputfile)
 {
 	ifstream infile;
 	infile.open(inputfile);
 	ofstream outfile;
 	outfile.open(outputfile);
-	string strtmp;
-	string str1 = "";
-	string str2 = "";
+	string strtmp;		//每一个待分割的字符串
+	string str1 = "";	//存储分割之后的字符串
+	string str2 = "";	//存储未完成的句子的后半部分
+	//今天是个好天气，我们
+	//去游泳，好不好
+	//strtmp = 今天是个好天气，我们
+	//str1 = 今天是个好天气，
+	//str2 = 我们
+	//strtmp = 去游泳，好不好
+	//str1 = 我们 + 去游泳，
+	//str2 = 好不好
 	while(getline(infile, strtmp, '\n'))
 	{
 		if(strtmp.empty())
@@ -113,14 +124,12 @@ void ChineseSplit::getSplitSegFile(const char* inputfile, const char* outputfile
 			}
 			if (index == 0)
 			{
-				//str1 = strtmp.substr(0, len);
 				str2 = strtmp.substr(0, len);
 				strtmp = "";
 			}
 			else
 			{
 				str1 = str2 + strtmp.substr(0, index+2);
-				//str1 =  strtmp.substr(0, index+2);
 				str2 = "";
 				strtmp =strtmp.substr(index+2, len-index-2);
 			}
@@ -138,8 +147,7 @@ void ChineseSplit::getSplitSegFile(const char* inputfile, const char* outputfile
 	}
 	return ;
 }
-
-
+//将字符串按 指定的字符串分割
 vector<string> split(string str,string pattern)
  {
      std::string::size_type pos;
@@ -162,7 +170,9 @@ vector<string> split(string str,string pattern)
      }
      return result;
  }
-
+//begin********************************************************
+//给输入的字符串进行标记，分别得到计算转移概率矩阵的statefile--str3
+//以及计算混淆概率矩阵的markfile--str2
 void markSentence(string str1, string& str2 ,string& str3)
 {
 	//int index;
@@ -254,7 +264,8 @@ void ChineseSplit::getMarkSentenceFile(const char* inputfile, const char* output
 	//infile.close();
 	cout<<"the num of records "<<num<<" ! " <<endl;
 }
-
+//end**********************************************************
+//将每一种状态的转移存入map表中
 void  initiation(map<string , int >& mapstring)
 {
 	//map<string , int >mapstring;
@@ -268,7 +279,51 @@ void  initiation(map<string , int >& mapstring)
 	mapstring["EB"] = 7;
 	return ;
 }
+//计算初始概率矩阵Pi[S,B,M,E]
+void ChineseSplit::getInitMatrix(const char* inputfile)
+{
+	
+	string strtmp;
+	ifstream infile;
+	infile.open(inputfile);
+	if (!infile.is_open())
+	{
+		cout<<"can not open inputfile"<<endl;
+		return ;
+	}
+	int* count = new int [M];
+	for (int i = 0; i < M; ++i)
+	{
+		count[i] = 0;
+	}
 
+	while(getline(infile, strtmp, '\n'))
+	{
+		if (strtmp.empty())
+		{
+			continue ;
+		}
+		if (strtmp[0] == 'S')
+		{
+			count[0]+=1;
+		}
+		else
+		{
+			count[1]+=1;
+		}
+	}
+	int sum = count[0] + count[1];
+	Pi[0] = (double)count[0] / sum;
+	Pi[1] = (double)count[1] / sum;
+	Pi[2] = (double)count[2] / sum;
+	Pi[3] = (double)count[3] / sum;
+	infile.close();
+	cout<<"the inilital probality matrix is:"<<endl;
+	disPlay1D(Pi, 4);
+	return ;
+}
+//begin**********************************************************************
+//计算每一种转移的数目
 void countNum(string& mark, int* count)
 {
 	//int count[8] = {0};
@@ -298,6 +353,8 @@ void countNum(string& mark, int* count)
 		}
 	return ;
 }
+//将转移状态的数目，转变为相应的概率
+//并将概率存入二维数组中
 void ChineseSplit::countFre(int* count, double* markfre, int m)
 {
 	int* sum = new int [M];
@@ -305,7 +362,6 @@ void ChineseSplit::countFre(int* count, double* markfre, int m)
 	{
 		sum[i] = 0;
 	}
-	//int sum[4] ={0};
 	int j = 0;
 	for (int i = 0; i < M; ++i)
 	{
@@ -316,9 +372,7 @@ void ChineseSplit::countFre(int* count, double* markfre, int m)
 	for (int i = 0; i < m; ++i)
 	{
 		markfre[i] = (double)count[i] / sum[i/2];
-		//cout<<"markfre:"<<markfre[i]<<endl;
 	}
-	//diaPlay1(markfre, 8);
 	return ;
 }
 void ChineseSplit::get2DTMatrix(double* markfre)
@@ -333,54 +387,7 @@ void ChineseSplit::get2DTMatrix(double* markfre)
 	TMatrix[3][1] = markfre[7];
 	return ;
 }
-
-void ChineseSplit::getInitMatrix(const char* inputfile)
-{
-	
-	string strtmp;
-	ifstream infile;
-	infile.open(inputfile);
-	if (!infile.is_open())
-	{
-		cout<<"can not open inputfile"<<endl;
-		return ;
-	}
-	int* count = new int [M];
-	for (int i = 0; i < M; ++i)
-	{
-		count[i] = 0;
-	}
-	//int count[4] = {0};
-	//double* iniMatrix;
-	//int tmp = 0;
-	while(getline(infile, strtmp, '\n'))
-	{
-		if (strtmp.empty())
-		{
-			continue ;
-		}
-		//tmp++;
-		//cout<<"tmp: "<<tmp<<endl;
-		if (strtmp[0] == 'S')
-		{
-			count[0]+=1;
-		}
-		else
-		{
-			count[1]+=1;
-		}
-	}
-	int sum = count[0] + count[3];
-	Pi[0] = (double)count[0] / sum;
-	Pi[1] = (double)count[1] / sum;
-	Pi[2] = (double)count[2] / sum;
-	Pi[3] = (double)count[3] / sum;
-	infile.close();
-	cout<<"the inilital probality matrix is:"<<endl;
-	disPlay1D(Pi, 4);
-	return ;
-}
-
+//计算转移概率矩阵
 void ChineseSplit::getTranMatrix(const char* inputfile)
 {
 	cout<<"counting the transfrom probality matrix ..."<<endl;
@@ -404,17 +411,13 @@ void ChineseSplit::getTranMatrix(const char* inputfile)
 		cout<<"can not open inputfile"<<endl;
 		return ;
 	}
-	//int tmp =0;
+	
 	while(getline(infile, strtmp, '\n'))
-	//for (int i = 0; i < 10; ++i)
 	{
-		//getline(infile, strtmp, '\n');
 		if (strtmp.empty())
 		{
 			continue ;
 		}
-		//tmp++;
-		//cout<<"tmp: "<<tmp<<endl;
 		int length = strtmp.length() ;
 		for (int j = 0; j < length-1; ++j)
 		{
@@ -430,6 +433,11 @@ void ChineseSplit::getTranMatrix(const char* inputfile)
 	infile.close();
 	return ;
 }
+//end**********************************************************************
+
+//begin********************************************************************
+//将输入的观测序列的集合文件，制作为每个中文字符的map表
+//同时将map保存在全局变量mapdata中
 void getMap(const char* inputfile, std::map<string, int>& mm)
 {
 	string strtmp;
@@ -473,7 +481,6 @@ void getMap(const char* inputfile, std::map<string, int>& mm)
  			m_it = mm.find(t0);
  			if (m_it == mm.end())
  			{
- 				//cout<<"tmp:"<<t0<<endl;
  				mm.insert(pair<string,int>(t0,num));
  				num++;
  			}
@@ -487,6 +494,7 @@ void getMap(const char* inputfile, std::map<string, int>& mm)
 	infile.close();
  	return ;
 }
+//通过查找map表，计算出混淆矩阵每个位置对应的计数值
 void getCMCoutData(const char* inputfile, double** countCMData)
 {
 	string strtmp;
@@ -498,23 +506,17 @@ void getCMCoutData(const char* inputfile, double** countCMData)
 	cout << "the map size: "<<mm0.size()<<endl;
 	ifstream infile;
 	infile.open(inputfile);
-	//int tmp00 =0;
  	while(getline(infile, strtmp, '\n'))
- 	// getline(infile1, strtmp, '\n');
  	{
 		if (strtmp.empty())
 		{
 			continue ;
 		}
-		//tmp00++;
-		//cout<<"tmp00: "<<tmp00<<endl;
  		int length = strtmp.length();
  		for (int i = 0; i < length-3;i+=3)
  		{
-
  			t0 = strtmp.substr(i,2);
  			t1 = strtmp.substr(i+2,1);
-
 			unsigned char ch = (unsigned char )t0[0];
 			if ( ch < 128)
 			{
@@ -557,25 +559,11 @@ void getCMCoutData(const char* inputfile, double** countCMData)
  				}
  			}
  		}
- 	}
-	
+ 	}	
 	infile.close();
 	return ;
 }
-void ChineseSplit::saveMapData(const char* outputfile)
-{
-	// mapdata 为全局变量，在getmapdata（）函数中赋值
-	// MapData 为类的私有变量
-	MapData = mapdata;
-	ofstream outfile;
-	outfile.open(outputfile);
-	std::map<string,int>::iterator m_it;
-	for ( m_it = MapData.begin(); m_it != MapData.end(); m_it++ )
-	{
-		outfile << m_it->first <<" "<< m_it->second << endl;
-	}
-	return ;
-}
+//根据计数值，得到概率值
 void ChineseSplit::getConMatrix(const char* inputfile)
 {
 	cout<<"counting the confuse probality matrix ..."<<endl;
@@ -593,14 +581,12 @@ void ChineseSplit::getConMatrix(const char* inputfile)
 		}
 	}
 	getCMCoutData(inputfile, countCMData);
-	//disPlay2D(countCMData, M,N);
 	//计算概率
 	double* sum = new double [M];
 	for (int i = 0; i < M; ++i)
 	{
 		sum[i] = 0.0;
 	}
-	//double sum[4] = {0.0};
 	for (int i = 0; i < M; ++i)
 	{
 		for (int j = 0; j < N; ++j)
@@ -608,8 +594,6 @@ void ChineseSplit::getConMatrix(const char* inputfile)
 			sum[i] += countCMData[i][j];
 		}		
 	}
-	//disPlay1D(sum, M);
-	//cout<<"sum:"<<sum<<endl;
 	for (int i = 0; i < M; ++i)
 	{
 		for (int j = 0; j < N; ++j)
@@ -621,7 +605,8 @@ void ChineseSplit::getConMatrix(const char* inputfile)
 	//disPlay2D(CMatrix, M,N);
 	return ;
 }
-
+//end**********************************************************************
+//保存训练之后的HMM模型参数
 void ChineseSplit::saveHMMModel(const char* outputfile)
 {
 	ofstream outfile;
@@ -656,5 +641,20 @@ void ChineseSplit::saveHMMModel(const char* outputfile)
 		outfile << endl;
 	}
 	outfile.close();
+	return ;
+}
+//保存观测集合的Map表数据
+void ChineseSplit::saveMapData(const char* outputfile)
+{
+	// mapdata 为全局变量
+	// MapData 为类的私有变量
+	MapData = mapdata;
+	ofstream outfile;
+	outfile.open(outputfile);
+	std::map<string,int>::iterator m_it;
+	for ( m_it = MapData.begin(); m_it != MapData.end(); m_it++ )
+	{
+		outfile << m_it->first <<" "<< m_it->second << endl;
+	}
 	return ;
 }

@@ -10,16 +10,15 @@ class ChineseSplit
 public:
 	ChineseSplit();
 	~ChineseSplit();
-	void initialModel();
 	map<string , int > getMapData();
 	//outputfile 为观测样本集添加标注
 	// eg 今B天E是S星B期M一E
 	// outputfile1 保存观测样本集的标注
 	// eg BESBME
+	void initialModel();
 	void getSplitSegFile(const char* inputfile, const char* outputfile);
 	void getMarkSentenceFile(const char* inputfile, const char* outputfile1, const char* outputfile2);
 	void countFre(int* count, double* markfre, int m);
-	//void getHMMModelFile(const char* inputfile, const char* outputfile);
 	void get2DTMatrix(double* markfre);
 	void getInitMatrix(const char* inputfile);
 	void getTranMatrix(const char* inputfile);

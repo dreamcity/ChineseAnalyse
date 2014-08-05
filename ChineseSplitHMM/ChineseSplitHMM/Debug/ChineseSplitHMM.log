@@ -1,4 +1,4 @@
-﻿生成启动时间为 2014/7/31 12:52:50。
+﻿生成启动时间为 2014/8/4 9:15:02。
      1>项目“D:\ProjectDev\ChineseAnalyse\ChineseSplitHMM\ChineseSplitHMM\ChineseSplitHMM.vcxproj”在节点 2 上(rebuild 个目标)。
      1>_PrepareForClean:
          正在删除文件“Debug\ChineseSplitHMM.lastbuildstate”。
@@ -16,8 +16,8 @@
          ChineseSplit.cpp
      1>d:\projectdev\chineseanalyse\chinesesplithmm\chinesesplithmm\chinesesplit.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
      1>d:\projectdev\chineseanalyse\chinesesplithmm\chinesesplithmm\chinesesplit.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-     1>d:\projectdev\chineseanalyse\chinesesplithmm\chinesesplithmm\chinesesplit.cpp(160): warning C4018: “<”: 有符号/无符号不匹配
-     1>d:\projectdev\chineseanalyse\chinesesplithmm\chinesesplithmm\chinesesplit.cpp(252): warning C4018: “<”: 有符号/无符号不匹配
+     1>d:\projectdev\chineseanalyse\chinesesplithmm\chinesesplithmm\chinesesplit.cpp(174): warning C4018: “<”: 有符号/无符号不匹配
+     1>d:\projectdev\chineseanalyse\chinesesplithmm\chinesesplithmm\chinesesplit.cpp(266): warning C4018: “<”: 有符号/无符号不匹配
          正在生成代码...
        ManifestResourceCompile:
          C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\ChineseSplitHMM.exe.embed.manifest.res" Debug\ChineseSplitHMM_manifest.rc 
@@ -45,4 +45,4 @@
 
 生成成功。
 
-已用时间 00:00:05.95
+已用时间 00:00:02.62

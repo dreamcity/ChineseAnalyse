@@ -51,7 +51,7 @@ void getSplitSegFile(const char* inputfile, const char* outputfile)
 					unsigned char ch1 = strtmp[i+1];
 					//当索引到的字符为，。；：！-?""时，结束索引
 					if ((ch0 ==163 && ch1==161)||(ch0 ==161 && ch1==163)||(ch0 ==163 && ch1==187)
-						||(ch0 ==163 && ch1==172)||(ch0 ==163 && ch1==191)||(ch0 ==161 && ch1==170)
+						||(ch0 ==163 && ch1==172)||(ch0 ==163 && ch1==191)
 						||(ch0 ==163 && ch1==186)||(ch0 ==161 && ch1==176)||(ch0 ==161 && ch1==177))
 					{
 						index = i;
@@ -60,6 +60,20 @@ void getSplitSegFile(const char* inputfile, const char* outputfile)
 					//为其他的中文字符，索引加2，继续索引
 					else
 					{
+						unsigned char ch3 = strtmp[i+2];
+						unsigned char ch4 = strtmp[i+3];
+						if ((ch0 ==161 && ch1==170)&&(ch3 ==161 && ch4 ==170))
+						{
+							int j =i;
+							while(ch3 ==161 && ch4 ==170)
+							{
+								j+=2;
+								ch3 = strtmp[j+2];
+								ch4 = strtmp[j+3];
+							}
+							index = j;
+							break;
+						}
 						i+=2;
 					}
 				}

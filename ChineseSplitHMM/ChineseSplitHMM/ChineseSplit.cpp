@@ -34,6 +34,20 @@ map<string , int >  ChineseSplit::getMapData()
 {
 	return MapData;
 }
+//将每一种状态的转移存入map表中
+void  initiation(map<string , int >& mapstring)
+{
+	//map<string , int >mapstring;
+	mapstring["SS"] = 0;
+	mapstring["SB"] = 1;
+	mapstring["BM"] = 2;
+	mapstring["BE"] = 3;
+	mapstring["MM"] = 4;
+	mapstring["ME"] = 5;
+	mapstring["ES"] = 6;
+	mapstring["EB"] = 7;
+	return ;
+}
 //初始化HMMmodel，主要是分配数组空间
 void ChineseSplit::initialModel()
 {
@@ -265,20 +279,7 @@ void ChineseSplit::getMarkSentenceFile(const char* inputfile, const char* output
 	cout<<"the num of records "<<num<<" ! " <<endl;
 }
 //end**********************************************************
-//将每一种状态的转移存入map表中
-void  initiation(map<string , int >& mapstring)
-{
-	//map<string , int >mapstring;
-	mapstring["SS"] = 0;
-	mapstring["SB"] = 1;
-	mapstring["BM"] = 2;
-	mapstring["BE"] = 3;
-	mapstring["MM"] = 4;
-	mapstring["ME"] = 5;
-	mapstring["ES"] = 6;
-	mapstring["EB"] = 7;
-	return ;
-}
+
 //计算初始概率矩阵Pi[S,B,M,E]
 void ChineseSplit::getInitMatrix(const char* inputfile)
 {
